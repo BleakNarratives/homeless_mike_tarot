@@ -1,0 +1,7 @@
+{
+  "name": "Copy of Homeless Mike's Tarot",
+  "description": "Generate a Major Arcana tarot deck featuring a custom face, with a theme of implied despair.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}

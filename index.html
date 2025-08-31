@@ -1,0 +1,96 @@
+<script type="importmap">
+  {
+    "imports": {
+      "@google/genai": "https://esm.sh/@google/genai@^0.12.0"
+    }
+  }
+  </script>
+  <!-- Add Google Fonts Link -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Metal+Mania&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+
+  <audio id="barrelFireAudio" src="barrel-fire.mp3" loop preload="auto"></audio>
+  <audio id="dogsBarkingAudio"src="dogs-barking.mp3" loop preload="auto"></audio>
+
+  <div class="main-container">
+    <button id="ambianceToggle" class="ambiance-toggle">
+      <svg id="ambiance-on-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+        <path fill-rule="evenodd" d="M13.28 3.97a.75.75 0 0 1 0 1.06L11.56 6.81a.75.75 0 0 1-1.06 0L8.72 5.03a.75.75 0 0 1 1.06-1.06l1.72 1.72 1.72-1.72a.75.75 0 0 1 1.06 0ZM4.5 12.75a.75.75 0 0 1 .75-.75h13.5a.75.75 0 0 1 0 1.5H5.25a.75.75 0 0 1-.75-.75Zm.22 4.28a.75.75 0 0 1 1.06 0l1.72 1.72 1.72-1.72a.75.75 0 1 1 1.06 1.06L10.5 19.81a.75.75 0 0 1-1.06 0L7.66 18.09a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+      </svg>
+      <svg id="ambiance-off-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6" style="display: none;">
+        <path fill-rule="evenodd" d="M3.53 3.53a.75.75 0 0 1 1.06 0l15.91 15.91a.75.75 0 1 1-1.06 1.06L3.53 4.59a.75.75 0 0 1 0-1.06ZM13.28 3.97a.75.75 0 0 1 0 1.06L11.56 6.81a.75.75 0 0 1-1.06 0L8.72 5.03a.75.75 0 0 1 1.06-1.06l1.72 1.72 1.72-1.72a.75.75 0 0 1 1.06 0ZM4.5 12.75a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5H5.25a.75.75 0 0 1-.75-.75Zm.22 4.28a.75.75 0 0 1 1.06 0l1.72 1.72 1.72-1.72a.75.75 0 1 1 1.06 1.06L10.5 19.81a.75.75 0 0 1-1.06 0L7.66 18.09a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+      </svg>
+    </button>
+    <div class="container">
+      <header>
+        <img id="appLogo" alt="Homeless Mike's Tarot Logo" />
+        <h1>Homeless Mike's Tarot</h1>
+      </header>
+      <p class="intro-text">
+        The full 78-card deck, reimagined through despair. State your query, choose from the cursed spreads below, and confront your grim fate.
+      </p>
+      <div class="query-controls">
+        <textarea id="userQuery" placeholder="Ask your question... (optional)"></textarea>
+        <select id="spreadSelect">
+          <option value="single">Single Card Draw (1 card)</option>
+          <option value="three-card" selected>Past, Present, Future (3 cards)</option>
+          <option value="situation">Situation, Obstacle, Advice (3 cards)</option>
+          <option value="mbs">Mind, Body, Spirit (3 cards)</option>
+          <option value="relationship">Relationship Spread (5 cards)</option>
+          <option value="chains-of-saturn">Chains of Saturn (6 cards)</option>
+          <option value="horseshoe">The Horseshoe (7 cards)</option>
+          <option value="celtic-cross">Celtic Cross (10 cards)</option>
+        </select>
+      </div>
+      <div class="button-container">
+        <button id="generateButton">Generate the Deck</button>
+        <button id="readingButton" style="display: none;">Get a Reading</button>
+      </div>
+       <div class="voice-status-container">
+        <svg class="mic-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M8.25 4.5a3.75 3.75 0 1 1 7.5 0v8.25a3.75 3.75 0 1 1-7.5 0V4.5Z" />
+          <path d="M6 10.5a.75.75 0 0 1 .75.75v1.5a4.5 4.5 0 0 0 9 0v-1.5a.75.75 0 0 1 1.5 0v1.5a6 6 0 1 1-12 0v-1.5a.75.75 0 0 1 .75-.75Z" />
+        </svg>
+        <span id="voiceStatus">Listening for commands...</span>
+      </div>
+       <div id="loadingContainer" class="loading-container" style="display: none;">
+        <div class="sigil-loader"></div>
+        <p class="loading-text">Generating your grim fate... This may take a while.</p>
+       </div>
+      <div id="errorMessage" class="error-message"></div>
+      <div id="readingResultContainer" class="reading-result-container">
+        <!-- Reading results will be displayed here -->
+      </div>
+      <div id="tarotDeckContainer" class="tarot-deck-container">
+        <!-- Tarot cards will be generated here -->
+      </div>
+    </div>
+  </div>
+  <dialog id="legalModal">
+    <button id="closeModalBtn">&times;</button>
+    <article>
+        <h2>Disclaimer</h2>
+        <p>This is for entertainment purposes only. If you take life advice from a burnt-out AI channeling a fictional homeless man, you've got bigger problems than these cards can solve. We're not responsible for you quitting your job, breaking up with your partner, or adopting a stray dog that turns out to be a coyote. That's on you, pal.</p>
+        
+        <h2>Terms of Service</h2>
+        <p>By using this service, you agree to stare into the abyss. The abyss may or may not stare back. No refunds, especially if you don't like what you hear. We reserve the right to be cynical, fatalistic, and generally unhelpful. Your continued use implies you're okay with that, or at least too tired to argue.</p>
+
+        <h2>User Guidelines</h2>
+        <p>Approach with low expectations. Don't ask questions you don't want the bleakest possible answer to. Feel free to cry. Tipping is appreciated; sympathy is not. Don't try to find me. I'm not lost.</p>
+
+        <h2>Privacy & Security</h2>
+        <p>Privacy is an illusion, just like free will. We don't want your data. We don't even know what to do with our own data. Payments are processed through Venmo. If you're worried about their security, you should be. We're all just ones and zeros screaming into the void anyway. Your secrets are safe with the static.</p>
+    </article>
+  </dialog>
+
+  <footer>
+    <a href="#" id="disclaimerLink">Disclaimer</a> | 
+    <a href="#" id="tosLink">Terms of Service</a> | 
+    <a href="#" id="privacyLink">Privacy Policy</a> | 
+    Venmo: @bleaknarratives
+  </footer>
+  <script type="module" src="/index.js"></script>
+</body>
+</html>
